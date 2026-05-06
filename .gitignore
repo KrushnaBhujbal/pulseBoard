@@ -1,0 +1,19 @@
+# Node
+node_modules/
+backend/.env
+
+# Terraform
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.backup
+terraform/*.tfvars
+
+# Environment
+.env
+.env.local
+
+# Build outputs
+frontend/dist/
+
+# OS
+.DS_Store
