@@ -2,7 +2,12 @@ const { DynamoDBClient } = require('@aws-sdk/client-dynamodb')
 const { DynamoDBDocumentClient, PutCommand, ScanCommand } = require('@aws-sdk/lib-dynamodb')
 
 // Create the DynamoDB client — it auto-picks credentials from AWS_PROFILE
-const client = new DynamoDBClient({ region: process.env.AWS_REGION || 'us-east-1' })
+const client = new DynamoDBClient({
+  region: process.env.AWS_REGION || 'us-east-1',
+  ...(process.env.NODE_ENV !== 'production' && {
+    credentials: undefined  // forces SDK to use credential chain (profile locally)
+  })
+})
 const dynamo = DynamoDBDocumentClient.from(client)
 
 const TABLE = process.env.DYNAMO_TABLE_NAME || 'pulseboard-metrics'
