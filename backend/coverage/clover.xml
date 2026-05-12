@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1778552204793" clover="3.2.0">
+  <project timestamp="1778552204793" name="All files">
+    <metrics statements="4" coveredstatements="4" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1" elements="7" coveredelements="6" complexity="0" loc="4" ncloc="4" packages="1" files="1" classes="1"/>
+    <file name="metricsService.js" path="C:\Users\UTA_S\pulseBoard\backend\src\services\metricsService.js">
+      <metrics statements="4" coveredstatements="4" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
+      <line num="1" count="1" type="stmt"/>
+      <line num="6" count="5" type="stmt"/>
+      <line num="8" count="5" type="stmt"/>
+      <line num="20" count="1" type="stmt"/>
+    </file>
+  </project>
+</coverage>
