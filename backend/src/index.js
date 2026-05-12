@@ -22,7 +22,7 @@ app.use('/api/metrics', metricsRouter)
 
 // Root check
 app.get('/', (req, res) => {
-  res.json({ message: 'PulseBoard API is running', version: '1.0.0' })
+  res.json({ message: 'PulseBoard API is running', version: '2.0.0' })
 })
 
 // Create HTTP server — WebSocket attaches to this same server
