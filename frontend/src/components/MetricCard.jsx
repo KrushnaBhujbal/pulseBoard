@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 
-// Animates a number from its previous value to the new value
 function useCountUp(value, duration = 600) {
   const [display, setDisplay] = useState(value)
   const prev = useRef(value)
@@ -24,10 +23,15 @@ function useCountUp(value, duration = 600) {
   return display
 }
 
-export function MetricCard({ label, value, unit = '', color = 'text-white', animate = false }) {
+export function MetricCard({ label, value, unit = '', color = 'text-white', animate = false, integer = false }) {
   const animated = useCountUp(animate ? parseFloat(value) || 0 : 0)
+
   const displayValue = animate
-    ? `${animated.toFixed(1)}${unit}`
+    ? integer
+      ? `${Math.round(animated)}${unit}`
+      : Number.isInteger(parseFloat(value)) && parseFloat(value) === Math.round(parseFloat(value))
+        ? `${Math.round(animated)}${unit}`
+        : `${animated.toFixed(1)}${unit}`
     : `${value}${unit}`
 
   return (

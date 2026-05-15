@@ -70,6 +70,46 @@ resource "aws_iam_role_policy" "ecs_task_dynamo" {
   })
 }
 
+resource "aws_iam_role_policy" "ecs_task_cloudwatch" {
+  name = "${var.project_name}-cloudwatch-read-policy"
+  role = aws_iam_role.ecs_task.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Action = [
+        "cloudwatch:GetMetricStatistics",
+        "cloudwatch:ListMetrics",
+        "logs:FilterLogEvents",
+        "logs:GetLogEvents",
+        "logs:DescribeLogStreams",
+        "elasticloadbalancing:DescribeLoadBalancers",
+        "elasticloadbalancing:DescribeTargetGroups"
+      ]
+      Resource = "*"
+    }]
+  })
+}
+
+resource "aws_iam_role_policy" "ecs_task_codedeploy" {
+  name = "${var.project_name}-codedeploy-read-policy"
+  role = aws_iam_role.ecs_task.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Action = [
+        "codedeploy:ListDeployments",
+        "codedeploy:GetDeployment",
+        "codedeploy:GetDeploymentGroup"
+      ]
+      Resource = "*"
+    }]
+  })
+}
+
 resource "aws_cloudwatch_log_group" "ecs" {
   name              = "/ecs/${var.project_name}"
   retention_in_days = 7
@@ -79,7 +119,6 @@ resource "aws_cloudwatch_log_group" "ecs" {
 
 resource "aws_ecs_cluster" "main" {
   name = "${var.project_name}-cluster"
-
   tags = { Project = var.project_name }
 }
 
@@ -103,7 +142,13 @@ resource "aws_ecs_task_definition" "backend" {
       { name = "NODE_ENV",           value = "production" },
       { name = "PORT",               value = "3001" },
       { name = "AWS_REGION",         value = var.aws_region },
-      { name = "DYNAMO_TABLE_NAME",  value = var.dynamo_table_name }
+      { name = "DYNAMO_TABLE_NAME",  value = var.dynamo_table_name },
+      { name = "CODEDEPLOY_APP",     value = "pulseboard-backend" },
+      { name = "CODEDEPLOY_GROUP",   value = "pulseboard-backend-dg" },
+      { name = "GITHUB_OWNER",       value = "KrushnaBhujbal" },
+      { name = "GITHUB_REPO",        value = "pulseBoard" },
+      { name = "CW_LOG_GROUP",       value = "/ecs/pulseboard" },
+      { name = "ALB_ARN",            value = "arn:aws:elasticloadbalancing:us-east-1:121720446284:loadbalancer/app/pulseboard-alb/fd358cae55bc0551" }
     ]
     logConfiguration = {
       logDriver = "awslogs"
