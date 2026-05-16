@@ -38,6 +38,20 @@ resource "aws_iam_role_policy_attachment" "ecs_execution" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
+resource "aws_iam_role_policy" "ecs_secrets" {
+  name = "${var.project_name}-secrets-policy"
+  role = aws_iam_role.ecs_task_execution.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect   = "Allow"
+      Action   = ["secretsmanager:GetSecretValue"]
+      Resource = "arn:aws:secretsmanager:us-east-1:121720446284:secret:pulseboard/*"
+    }]
+  })
+}
+
 resource "aws_iam_role" "ecs_task" {
   name = "${var.project_name}-ecs-task-role"
 
@@ -150,6 +164,10 @@ resource "aws_ecs_task_definition" "backend" {
       { name = "CW_LOG_GROUP",       value = "/ecs/pulseboard" },
       { name = "ALB_ARN",            value = "arn:aws:elasticloadbalancing:us-east-1:121720446284:loadbalancer/app/pulseboard-alb/fd358cae55bc0551" }
     ]
+    secrets = [{
+      name      = "GITHUB_TOKEN"
+      valueFrom = "arn:aws:secretsmanager:us-east-1:121720446284:secret:pulseboard/github-token"
+    }]
     logConfiguration = {
       logDriver = "awslogs"
       options = {

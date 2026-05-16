@@ -20,7 +20,19 @@
         { "name": "NODE_ENV",          "value": "production" },
         { "name": "PORT",              "value": "3001" },
         { "name": "AWS_REGION",        "value": "us-east-1" },
-        { "name": "DYNAMO_TABLE_NAME", "value": "pulseboard-metrics" }
+        { "name": "DYNAMO_TABLE_NAME", "value": "pulseboard-metrics" },
+        { "name": "CODEDEPLOY_APP",    "value": "pulseboard-backend" },
+        { "name": "CODEDEPLOY_GROUP",  "value": "pulseboard-backend-dg" },
+        { "name": "GITHUB_OWNER",      "value": "KrushnaBhujbal" },
+        { "name": "GITHUB_REPO",       "value": "pulseBoard" },
+        { "name": "CW_LOG_GROUP",      "value": "/ecs/pulseboard" },
+        { "name": "ALB_ARN",           "value": "arn:aws:elasticloadbalancing:us-east-1:121720446284:loadbalancer/app/pulseboard-alb/fd358cae55bc0551" }
+      ],
+      "secrets": [
+        {
+          "name": "GITHUB_TOKEN",
+          "valueFrom": "arn:aws:secretsmanager:us-east-1:121720446284:secret:pulseboard/github-token"
+        }
       ],
       "logConfiguration": {
         "logDriver": "awslogs",
